@@ -29,6 +29,7 @@ start_time = time.time()
 
 
 
+
 # find the index of zero in a given array
 def findzero(arr1):
     for i in range(len(arr1)):
