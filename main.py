@@ -3,12 +3,13 @@ from numpy import *
 import ast
 import sys
 import time
+import random
 
 xofzero = 0
 yofzero = 0
 wrongcount = 0
 maxlengfth = 1
-arr1 = [[1, 2, 5], [3, 4, 0], [6, 7, 8]]
+arr1 = [[3, 1, 2], [6, 4, 5], [0, 7, 8]]
 arrgoal = [[0, 1, 2], [3, 4, 5], [6, 7, 8]]
 newxtobemoved = [[0, 0], [0, 0], [0, 0], [0, 0]]
 newytobemoved = [[0, 0], [0, 0], [0, 0], [0, 0]]
@@ -26,8 +27,40 @@ start_time = time.time()
 # 1306190035
 # IU-C 2021-2022 Autumn AI Homework
 
+def getWrongCount(arr):
+    wrong_count = 0
+    none_vals = -1
+    for i in range(0, 9):
+        for j in range(i + 1, 9):
+            if arr[j] != none_vals and arr[i] != none_vals and arr[i] > arr[j]:
+                wrong_count += 1
+    return wrong_count
 
 
+def canSolve(sequence):
+    wrong_count = getWrongCount([j for sub in sequence for j in sub])
+    return (wrong_count % 2 == 0)
+
+
+def randomgenerate():
+    global arr1
+    newcounter = 0
+    creatednumbers = list()
+    number = random.randint(0, 8)
+    while (newcounter < 9):
+        if (number not in creatednumbers):
+            creatednumbers.append(number)
+            newcounter += 1
+        else:
+            number = random.randint(0, 8)
+    for i in range(3):
+        for j in range(3):
+            arr1[i][j] = creatednumbers.pop(0)
+    if (canSolve(arr1)):
+        print("The puzzle which created is : " + arr1.__str__())
+    else:
+        print("puzzle is non-solvable creating again")
+        randomgenerate()
 
 
 # find the index of zero in a given array
@@ -217,7 +250,7 @@ def dfs():
                 print("--- %s seconds have passed and solution has been found---" % (time.time() - start_time))
                 print("Solution has been found with Depth-first Search")
                 print(("Fringe : " + len(fringe).__str__()))
-                print("Nodes expanded : " + len(cocuklar).__str__())
+                print("expand : " + expand.__str__())
                 print("Starting situation was ")
                 printtable(arr1)
                 print("=================")
@@ -234,7 +267,6 @@ def dfs():
                 fringe = cocuklar.copy() + fringe
 
                 graph[repr(temp)] = cocuklar.copy()
-                print(expand.__str__() + " node is searched")
 
 
 # function to search the given sequence with Breadth-first
@@ -253,7 +285,7 @@ def bfs():
                 print("--- %s seconds have passed and solution has been found---" % (time.time() - start_time))
                 print("Solution has been found with Breadth-first Search")
                 print(("Fringe : " + len(fringe).__str__()))
-                print("Nodes expanded : " + len(cocuklar).__str__())
+                print("Nodes expanded : " + expand.__str__())
                 print("Starting situation was ")
                 printtable(arr1)
                 print("=================")
@@ -269,7 +301,6 @@ def bfs():
                     cocuklar.remove(silincek)
                 fringe = fringe + cocuklar.copy()
                 graph[repr(temp)] = cocuklar.copy()
-                print(expand.__str__() + " node is searched")
 
 
 # function to search the given sequence with Depth limited Search
@@ -290,7 +321,7 @@ def dls(depthlimit, dls):
                 print("--- %s seconds have passed and solution has been found---" % (time.time() - start_time))
                 print("Solution has been found with Depth limited Search")
                 print(("Fringe : " + len(fringe).__str__()))
-                print("Nodes expanded : " + len(cocuklar).__str__())
+                print("Nodes expanded : " + expand.__str__())
                 print("Starting situation was ")
                 printtable(arr1)
                 print("=================")
@@ -300,7 +331,7 @@ def dls(depthlimit, dls):
                 print("--- %s seconds have passed and solution has been found---" % (time.time() - start_time))
                 print("Solution has been found with Iterative deepening Search")
                 print(("Fringe : " + len(fringe).__str__()))
-                print("Nodes expanded : " + len(cocuklar).__str__())
+                print("Nodes expanded : " + expand.__str__())
                 print("Starting situation was ")
                 printtable(arr1)
                 print("=================")
@@ -335,7 +366,7 @@ def ids():
     global fringe
     depth = 1
     while True:
-        durum = dls(depth,True)
+        durum = dls(depth, True)
         if durum == True:
             break
         else:
@@ -344,5 +375,11 @@ def ids():
 
 
 # write here the algorithm that you want to search with
-dls(3,False)
-
+# Examples :
+# dls(3, False)
+# dfs()
+# ids()
+# bfs()
+#first generate the sequence
+randomgenerate()
+dls(12, False)
