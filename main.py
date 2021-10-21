@@ -7,8 +7,8 @@ import time
 xofzero = 0
 yofzero = 0
 wrongcount = 0
-arr1 = [[7, 2, 4], [5, 0, 6], [8, 3, 1]]
-firstarray = [[1, 3, 8], [4, 0, 6], [2, 5, 7]]
+maxlengfth = 1
+arr1 = [[1, 2, 5], [3, 4, 0], [6, 7, 8]]
 arrgoal = [[0, 1, 2], [3, 4, 5], [6, 7, 8]]
 newxtobemoved = [[0, 0], [0, 0], [0, 0], [0, 0]]
 newytobemoved = [[0, 0], [0, 0], [0, 0], [0, 0]]
@@ -22,7 +22,14 @@ headnodes = [[1, 2, 5], [3, 4, 0], [6, 7, 8], [[0, 1, 2], [3, 6, 4], [7, 8, 5]],
 start_time = time.time()
 
 
-# find the index of zero
+# Nihat Pamukcu
+# 1306190035
+# IU-C 2021-2022 Autumn AI Homework
+
+
+
+
+# find the index of zero in a given array
 def findzero(arr1):
     for i in range(len(arr1)):
         for j in range(len(arr1[i])):
@@ -31,7 +38,7 @@ def findzero(arr1):
                 findzero.yofzero = j
 
 
-# swapping to indexes
+# swapping to indexes in a given array
 def swapnumber(a, b, i, j):
     global arr1
     global firstarray
@@ -52,7 +59,7 @@ def printtable(arr1):
     print(arr1[2])
 
 
-# checking how many wrong numbers do we have
+# checking how many wrong numbers do we have (not necessary just added for myself to try another algorithm)
 def checkwrong(arr1):
     checkwrong.wrongcount = 0
     if (arr1[0][0]) != 0:
@@ -160,86 +167,7 @@ def wherecanmove(arr1):
     return liste
 
 
-def getfather(graph, value):
-    for i in graph:
-        if (value in graph[i]):
-            return i
-    return "yok"
-
-
-def control(array1, checkvalue):
-    for i in array1:
-        if (checkvalue in headnodes):
-            return checkvalue
-    return 0
-
-
-maxlengfth = 1
-
-
-def dfs():
-    global maxlengfth
-    global fringe
-    expand = 0
-    while True:
-
-        if (len(fringe) == 0):
-            return False
-        else:
-            temp = fringe.pop(0)
-
-            if (temp == arrgoal):
-                print("--- %s seconds have passed and solution has been found---" % (time.time() - start_time))
-                print(("Fringe : " + len(fringe).__str__()))
-                print("Nodes expanded : " + expand.__str__())
-                print("Starting situation was " + arr1.__str__())
-                print(temp)
-                return True
-            else:
-
-                cocuklar = wherecanmove(temp)
-                expand += 1
-
-                if (getfather(graph, temp) != "yok"):
-                    silincek = ast.literal_eval(str(getfather(graph, temp)))
-                    cocuklar.remove(silincek)
-                fringe = cocuklar.copy() + fringe
-
-                graph[repr(temp)] = cocuklar.copy()
-                print(expand.__str__() + " node is searched")
-
-
-def bfs():
-    global fringe
-    expand = 0
-    while True:
-
-        if (len(fringe) == 0):
-            return False
-        else:
-            temp = fringe.pop(0)
-
-            if (temp == arrgoal):
-
-                print("--- %s seconds have passed and solution has been found---" % (time.time() - start_time))
-                print(("Fringe : " + len(fringe).__str__()))
-                print("Nodes expanded : " + expand.__str__())
-                print("Starting situation was " + arr1.__str__())
-                print(temp)
-                return True
-            else:
-
-                cocuklar = wherecanmove(temp)
-                expand += 1
-
-                if (getfather(graph, temp) != "yok"):
-                    sikilcek = ast.literal_eval(str(getfather(graph, temp)))
-                    cocuklar.remove(sikilcek)
-                fringe = fringe + cocuklar.copy()
-                graph[repr(temp)] = cocuklar.copy()
-                print(expand.__str__() + " node is searched")
-
-
+# moves the blank (0) tile to positions which found before
 def move():
     global final
     listniyo = list()
@@ -255,30 +183,165 @@ def move():
         listniyo.append(swapnumber(newytobemoved[i][0], newytobemoved[i][1], findzero.xofzero, findzero.yofzero))
     return listniyo
 
-    '''
-        if (getfather(graph, arr1)) != "yok":
-        oppurtunities.remove(ast.literal_eval(getfather(graph, arr1)))
-    headnodes.append(arr1.copy())
 
-    for s in range(len(oppurtunities)):
-        if (oppurtunities[s] in headnodes):
-            oppurtunities.remove(oppurtunities[s])
+# gives me the father of any node when i want
+def getfather(graph, value):
+    for i in graph:
+        if (value in graph[i]):
+            return i
+    return "yok"
+
+
+# lets me control if there is any-same other from the node
+def control(array1, checkvalue):
+    for i in array1:
+        if (checkvalue in headnodes):
+            return checkvalue
+    return 0
+
+
+# function to search the given sequence with Depth-first
+def dfs():
+    global maxlengfth
+    global fringe
+    expand = 0
+    while True:
+
+        if (len(fringe) == 0):
+            return False
+        else:
+            temp = fringe.pop(0)
+
+            if (temp == arrgoal):
+                print("--- %s seconds have passed and solution has been found---" % (time.time() - start_time))
+                print("Solution has been found with Depth-first Search")
+                print(("Fringe : " + len(fringe).__str__()))
+                print("Nodes expanded : " + len(cocuklar).__str__())
+                print("Starting situation was ")
+                printtable(arr1)
+                print("=================")
+                printtable(temp)
+                return True
+            else:
+
+                cocuklar = wherecanmove(temp)
+                expand += 1
+
+                if (getfather(graph, temp) != "yok"):
+                    silincek = ast.literal_eval(str(getfather(graph, temp)))
+                    cocuklar.remove(silincek)
+                fringe = cocuklar.copy() + fringe
+
+                graph[repr(temp)] = cocuklar.copy()
+                print(expand.__str__() + " node is searched")
+
+
+# function to search the given sequence with Breadth-first
+def bfs():
+    global fringe
+    expand = 0
+    while True:
+
+        if (len(fringe) == 0):
+            return False
+        else:
+            temp = fringe.pop(0)
+
+            if (temp == arrgoal):
+
+                print("--- %s seconds have passed and solution has been found---" % (time.time() - start_time))
+                print("Solution has been found with Breadth-first Search")
+                print(("Fringe : " + len(fringe).__str__()))
+                print("Nodes expanded : " + len(cocuklar).__str__())
+                print("Starting situation was ")
+                printtable(arr1)
+                print("=================")
+                printtable(temp)
+                return True
+            else:
+
+                cocuklar = wherecanmove(temp)
+                expand += 1
+
+                if (getfather(graph, temp) != "yok"):
+                    silincek = ast.literal_eval(str(getfather(graph, temp)))
+                    cocuklar.remove(silincek)
+                fringe = fringe + cocuklar.copy()
+                graph[repr(temp)] = cocuklar.copy()
+                print(expand.__str__() + " node is searched")
+
+
+# function to search the given sequence with Depth limited Search
+def dls(depthlimit, dls):
+    global fringe
+    expand = 0
+    depths = dict()
+    depths[repr(fringe[0])] = 0
+    paths = [fringe]
+    while True:
+        if (len(fringe) == 0):
+            return False
+        else:
+            temp = fringe[0].copy()
+            fringe.remove(temp)
+
+            if temp == arrgoal and dls == False:
+                print("--- %s seconds have passed and solution has been found---" % (time.time() - start_time))
+                print("Solution has been found with Depth limited Search")
+                print(("Fringe : " + len(fringe).__str__()))
+                print("Nodes expanded : " + len(cocuklar).__str__())
+                print("Starting situation was ")
+                printtable(arr1)
+                print("=================")
+                printtable(temp)
+                return True
+            elif temp == arrgoal and dls == True:
+                print("--- %s seconds have passed and solution has been found---" % (time.time() - start_time))
+                print("Solution has been found with Iterative deepening Search")
+                print(("Fringe : " + len(fringe).__str__()))
+                print("Nodes expanded : " + len(cocuklar).__str__())
+                print("Starting situation was ")
+                printtable(arr1)
+                print("=================")
+                printtable(temp)
+                return True
+
+            else:
+                expand += 1
+                if depths[repr(temp)] < depthlimit:
+
+                    cocuklar = wherecanmove(temp)
+                    removes = list()
+                    for i in cocuklar:
+
+                        if i not in paths:
+                            paths.append(i)
+                            depths[repr(i)] = depths[repr(temp)] + 1
+                        else:
+                            removes.append(i)
+                    for i in removes:
+                        cocuklar.remove(i)
+
+                    fringe = cocuklar.copy() + fringe
+                    graph[repr(temp)] = cocuklar.copy()
+                else:
+                    graph[repr(temp)] = []
+
+
+# function to search the given sequence with Iterative deepening Search
+def ids():
+    global arr1
+    global fringe
+    depth = 1
+    while True:
+        durum = dls(depth,True)
+        if durum == True:
             break
-
-    graph[repr(arr1)] = oppurtunities
-    print(arr1)
-    arr1.clear()
-    arr1 = oppurtunities.copy()[0]
-    n += 1
-
-    if (arr1 == arrgoal):
-        print(graph)
-        print("sonuc bulundu")
-        final = True
-        quit()
-
-    '''
+        else:
+            fringe = [arr1]
+            depth += 1
 
 
-dfs()
-# dfs
+# write here the algorithm that you want to search with
+dls(3,False)
+
